@@ -1,0 +1,122 @@
+USE_LR_PARSER
+
+program
+
+(* ==========================================================================*)
+
+<program>           ::= <stmtList>                                            .
+
+<stmtList>         ::= <stmt> ";" <stmtList>
+                      | <epsilon>                                              .
+
+<epsilon>           ::= .
+
+<stmt>              ::= <assignment>
+                      | <declaration>
+                      | <block>
+                      | <forBlock>
+                      | <whileBlock>
+                      | <ifBlock>
+                      | <printstmt>                                            .
+
+
+
+(*Iterative Statements========================================================*)
+
+<forBlock>          ::= "for" "(" <assignment> ";" <expr> ";" <assignment> ")"
+                        <block>                                                .
+
+<whileBlock>        ::= "while" <expr> <block>                                 .
+
+
+
+(*Block=======================================================================*)
+
+<block>             ::= "{" <stmtList> "}"                                    .
+
+
+(*Assign======================================================================*)
+
+<assignment>        ::= id "=" <expr> | <increment>                            .
+
+
+(*Conditional Statements======================================================*)
+
+<ifBlock>           ::= "if" <expr> "then" <block>
+                      | "if" <expr> "then" <block> "else" <block>              .
+
+(*Declaration=================================================================*)
+
+<declaration>       ::= "int" id
+                      | "bool" id                                              .
+
+
+(*Expressions=================================================================*)
+
+<expr>              ::= <expr> <or> <exprAnd>
+                      | <exprAnd>                                              .
+
+<exprAnd>           ::= <exprAnd> <and> <exprRel>
+                      | <exprRel>                                              .
+
+<exprRel>           ::= <exprRel> <rel> <exprAdd>
+                      | <exprAdd>                                              .
+
+<exprAdd>           ::= <exprAdd> <add> <exprTerm>
+                      | <exprTerm>                                             .
+
+<exprTerm>          ::= <exprTerm> <mult> <exprUnary>
+                      | <exprUnary>                                            .
+
+<exprUnary>         ::= <neg> <exprUnary>
+                      | <exprExpo>                                             .
+
+<exprExpo>          ::= <exprNot> <expo> <exprExpo>
+                      | <exprNot>                                              .
+
+<exprNot>           ::= <not> <exprFactor>
+                      | <exprFactor>                                           .
+
+<exprFactor>        ::= "(" <expr> ")"
+                      | integer
+                      | id
+                      | <increment>
+                      | "true"
+                      | "false"
+                      | "|" <expr> "|"                                         .
+
+<increment>         ::= <inc> id
+                      | id <inc>                                               . 
+
+<or>                ::= "||"                                                   .
+
+<and>               ::= "&&"                                                   .
+
+<rel>               ::= "=="
+                      | "!="
+                      | "<"
+                      | "<="
+                      | ">"
+                      | ">="                                                   .
+
+<add>               ::= "+"
+                      | "-"                                                    .
+
+<mult>              ::= "*" 
+                      | "/"
+                      | "%"                                                    .
+
+<neg>               ::= "~"                                                    .
+
+<inc>               ::= "++"                                                   
+                      | "--"                                                   .
+
+<expo>              ::= "^"                                                    .
+
+<not>               ::= "!"                                                    .
+
+
+(*Print Statement=============================================================*)
+
+<printstmt>         ::= "print" "(" <expr>  ")"                                 
+                      | "print" "(" printable ")"                              .
